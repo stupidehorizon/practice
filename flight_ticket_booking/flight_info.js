@@ -61,37 +61,4 @@ const FLIGHT_INFO = [
   }
 ]
 
-class FlightTicketBooking {
-  /**
-   * 构造函数
-   * @param {string} type 乘客类型 Regular / Reward
-   * @param {string} weekdaysType 是否是周内 weekDays / weekEnds
-   * @param {string} time 乘机时间  hh:mm
-   */
-  constructor(type, weekdaysType, time, from, to) {
-    this.type = type;
-    this.weekdaysType = weekdaysType;
-    this.time = time;
-    this.from = from;
-    this.to = to;
-  }
-
-  getLowestPriceFlight() {
-    const condition = this.weekdaysType + this.type;
-    const fliterFlight = FLIGHT_INFO.filter(flight => (
-      flight.from === this.from && flight.to === this.to && flight.time === this.time
-    ));
-    const lowPriceFlight = fliterFlight.reduce((pre, cur) => (
-      pre.price < cur[condition] ? pre : {price: cur[condition], flight: cur.flight }
-    ), {});
-    return lowPriceFlight;
-  }
-}
-
-// test
-
-const a = new FlightTicketBooking('Regular', 'weekdays', '08:00', 'xian', 'chengdu');
-console.log(a.getLowestPriceFlight()); // {price: 1100, flight: "GD2501"}
-
-const b = new FlightTicketBooking('Reward', 'weekdays', '08:00', 'xian', 'chengdu');
-console.log(b.getLowestPriceFlight()); // {price: 800, flight: "GD2501"}
+export default FLIGHT_INFO;
