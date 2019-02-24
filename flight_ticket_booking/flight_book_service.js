@@ -31,9 +31,9 @@ class FlightBookService {
     ));
     // 根据乘客身份与日期选择最低机票条件数组
     const lowestPriceFlightArr = fliterFlight.map(item => (
-      {flight: item.flight, price: item[condition]}
+      {flight: item.flight, price: item[condition], time: item.time }
     ))
-    console.log(lowestPriceFlightArr);
+
     // 找到最低票价航班
     let lowestPrice = Number.MAX_SAFE_INTEGER;
     let lowestPriceFlishts = [];
@@ -44,8 +44,7 @@ class FlightBookService {
       } else if(flight.price === lowestPrice) {
         lowestPriceFlishts.push(flight);
       }
-    }
-    console.log(lowestPriceFlishts);
+    };
 
     if(lowestPriceFlishts.length < 1) {
       return '没有符合条件的航班';
@@ -54,11 +53,16 @@ class FlightBookService {
       return lowestPriceFlishts[0];
     }
     // 寻找最靠近12点的航班
-    const lowestPriceFlight = lowestPriceFlishts.reduce((pre, cur) => (
-      pre.time  && Math.abs(parseInt(pre.time.split(':').join('')) - 1200) <  Math.abs(parseInt(cur.time.split(':').join('')) - 1200) ? pre : {price: cur[condition], flight: cur.flight }
+    const lowestPriceAndClose12Flight = lowestPriceFlishts.reduce((pre, cur) => (
+      pre.time  && Math.abs(Number(pre.time.split(':').join('')) - 1200) <  Math.abs(Number(cur.time.split(':').join('')) - 1200) ? pre : cur
     ), {});
-    return lowestPriceFlight;
+    return lowestPriceAndClose12Flight;
   }
+
+  getRoundtripTicket(person, itinerary1, itinerary2) {
+    return [this.getLowestPriceFlight(person, itinerary1), this.getLowestPriceFlight(person, itinerary2)];
+  }
+
 }
 
 const fliterBookService = new FlightBookService();
