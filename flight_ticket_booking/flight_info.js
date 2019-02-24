@@ -61,4 +61,4 @@ const FLIGHT_INFO = [
   }
 ]
 
-export default FLIGHT_INFO;
+module.exports = FLIGHT_INFO;
