@@ -26,18 +26,20 @@ const itinerary2 = {
 FlightBookService.setFlightInfo(FlightInfo);
 
 
-const ticket1 = FlightBookService.getLowestPriceFlight(person1, itinerary1);
-console.log(ticket1);
+// const ticket1 = FlightBookService.getLowestPriceFlight(person1, itinerary1);
+// console.log(ticket1);
 // { flight: 'GD8732', price: 400 };
 
-const ticket2 = FlightBookService.getLowestPriceFlight(person2, itinerary2);
-console.log(ticket2);
+// const ticket2 = FlightBookService.getLowestPriceFlight(person2, itinerary2);
+// console.log(ticket2);
 // { flight: 'GD2607', price: 1600, time: '16:25' };
 
-const ticket3 = FlightBookService.getRoundtripTicket(person1, itinerary1, itinerary2);
-console.log(ticket3);
+// const ticket3 = FlightBookService.getRoundtripTicket(person1, itinerary1, itinerary2);
+// console.log(ticket3);
 // [ { flight: 'GD8732', price: 400 }, { flight: 'GD2501', price: 800 } ];
 
-const ticket4 = FlightBookService.getRoundtripTicket(person2, itinerary1, itinerary2);
-console.log(ticket4);
+// const ticket4 = FlightBookService.getRoundtripTicket(person2, itinerary1, itinerary2);
+// console.log(ticket4);
 // [ { flight: 'GD2606', price: 600, time: '12:25' }, { flight: 'GD2607', price: 1600, time: '16:25' } ]
+// console.log(arguments[1])
+console.log(FlightBookService.getRoundtripTicket({type: process.argv[2]}, {from: 'xian', to: 'chengdu', date: process.argv[3]}, {from: 'chengdu', to: 'xian', date: process.argv[4]}));
