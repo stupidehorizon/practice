@@ -6,50 +6,62 @@ class P {
   constructor(func) {
     this.state = PENDING;
     this.result = null;
-    this.eventQueue = [];
+    this.promiseChain = [];
+    this.errorHandle = () => {};
+
     this.resolve = this.resolve.bind(this);
     this.reject = this.reject.bind(this);
     this.then = this.then.bind(this);
-    func(this.resolve, this.reject);
+
+    // 放到异步队列里面确保 .then 函数已经注册
+    setTimeout(() => {
+      func(this.resolve, this.reject);
+    }, 0);
   }
 
   resolve(result) {
-     this.state = RESOLVE;
-     this.result = result;
-     this.eventQueue.forEach(([successHandle, failHandle]) => {
-      successHandle && successHandle(result);
-     });
+    let storedValue = result;
+    this.state = RESOLVE;
+    this.result = result;
+    try {
+      this.promiseChain.forEach(([successHandle, failHandle]) => {
+        storedValue = successHandle(storedValue);
+      });
+    } catch (error) {
+      this.errorHandle(error);
+    };
   }
 
-  reject(result) {
-     this.state = REJECT;
-     this.result = result;
-     this.eventQueue.forEach(([successHandle, failHandle]) => {
-      failHandle && failHandle(result);
-     });
+  reject(error) {
+    this.state = REJECT;
+    this.result = error;
+    this.errorHandle(error)
   }
 
   then(successHandle, failHandle) {
-    switch(this.state) {
-      case RESOLVE: successHandle && successHandle(this.result); break;
-      case REJECT: failHandle && failHandle(this.result); break;
-      case PENDING: this.eventQueue.push([successHandle,failHandle]); break;
-    };
+    this.promiseChain.push([successHandle, failHandle]);
+    return this;
   }
 
   finally(finallyResolve) {
 
   }
 
-  catch(failResolve) {
-
+  catch(errorHandle) {
+    this.errorHandle = errorHandle;
   }
 }
 
-p = new P(function (resolve, reject){
+p = new P(function (resolve, reject) {
   setTimeout(() => {
-    resolve('promise resolve');
+    resolve(1);
   }, 2000);
 })
 
-p.then(console.log);
+p.then((res) => {
+  console.log('then1 result:', res);
+  return res + 1;
+}).then(res => {
+  console.log('then2 result:', res);
+  return res + 1;
+})
