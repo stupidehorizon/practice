@@ -97,7 +97,7 @@ const dynamicPlanning = (items, limitedWeight) => {
   }
   /** 最大的 value 值就是数组最后一行的最大值 */
   return Math.max(...status.map(arr => Math.max(...arr)));
-}
+
   /** 不装第 i 个物品, Items 见上面那段代码 */
   const maxValue = dynamicPlanning(Items, 6);
   console.log(maxValue); // 8
@@ -106,6 +106,3 @@ const dynamicPlanning = (items, limitedWeight) => {
 ### 总结
 
 这两个算法其实感觉很像，不过回溯算法是采用穷举发，列出了所有可能。而动态规划则是更具上一步状态来推到下一步的状态。
-
-
-
